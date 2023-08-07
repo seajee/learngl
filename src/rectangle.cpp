@@ -130,6 +130,9 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0); // Unbind to be sure that other VAO calls won't accidentally modify this VAO
 
+    // Set wireframe rendering
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     // Event loop
     while (!glfwWindowShouldClose(window)) {
         // Input
