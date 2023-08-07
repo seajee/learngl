@@ -7,4 +7,5 @@ CFLAGS="-Wall -Wextra -std=c++20"
 INCLUDE="-I ./include"
 LIBS="$(pkg-config --cflags --libs glfw3 gl x11 xrandr xi)"
 
-$CC $CFLAGS $INCLUDE $LIBS ./src/main.cpp ./src/glad.c -o build/out
+$CC $CFLAGS $INCLUDE $LIBS ./src/triangle.cpp ./src/glad.c -o build/triangle
+$CC $CFLAGS $INCLUDE $LIBS ./src/rectangle.cpp ./src/glad.c -o build/rectangle
