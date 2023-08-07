@@ -103,6 +103,7 @@ int main()
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
+    // Generate the VBO and VAO
     uint32_t vbo, vao;
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
