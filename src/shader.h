@@ -20,6 +20,6 @@ namespace learngl
         void SetFloat(const std::string& name, float value);
 
     private:
-        uint32_t m_ShaderProgramId;
+        uint32_t m_ShaderProgramId = 0;
     };
 }
