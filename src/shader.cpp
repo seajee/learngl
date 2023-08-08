@@ -6,36 +6,13 @@
 
 #include <glad/glad.h>
 
+#include "utils.h"
+
 learngl::Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
-    std::string vertexSource;
-    std::string fragmentSource;
-
-    std::ifstream vFile;
-    std::ifstream fFile;
-
-    vFile.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-    fFile.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-
     // Read shader files
-    try {
-        vFile.open(vertexPath);
-        fFile.open(fragmentPath);
-
-        std::stringstream vStream;
-        std::stringstream fStream;
-
-        vStream << vFile.rdbuf();
-        fStream << fFile.rdbuf();
-
-        vFile.close();
-        fFile.close();
-
-        vertexSource = vStream.str();
-        fragmentSource = fStream.str();
-    } catch (std::ifstream::failure const& e) {
-        std::cerr << "ERROR: Error while reading shader file" << std::endl;
-    }
+    std::string vertexSource = learngl::utils::ReadFile(vertexPath);
+    std::string fragmentSource = learngl::utils::ReadFile(fragmentPath);
 
     // Compile shader files
     const char* vCode = vertexSource.c_str();
