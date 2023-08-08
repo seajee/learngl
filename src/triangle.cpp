@@ -12,25 +12,35 @@ void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 void ProcessInput(GLFWwindow* window);
 
 float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
+    // positions          // colors
+     0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, // bottom right
+    -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,  0.0f, // bottom left
+     0.0f,  0.5f,  0.0f,  0.0f,  0.0f,  1.0f  // top
 };
 
 const char* vertex_shader_source =
     "#version 330 core\n"
-    "layout (location = 0) in vec3 pos;\n"
+    "\n"
+    "layout (location = 0) in vec3 a_pos;\n"
+    "layout (location = 1) in vec3 a_color;\n"
+    "\n"
+    "out vec3 color;\n"
+    "\n"
     "void main()\n"
     "{\n"
-    "    gl_Position = vec4(pos.x, pos.y, pos.z, 1.0f);\n"
+    "    gl_Position = vec4(a_pos, 1.0f);\n"
+    "    color = a_color;\n"
     "}";
 
 const char* fragment_shader_source =
     "#version 330 core\n"
+    "\n"
     "out vec4 frag_color;\n"
+    "in vec3 color;\n"
+    "\n"
     "void main()\n"
     "{\n"
-    "    frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "    frag_color = vec4(color, 1.0f);\n"
     "}";
 
 char info_log[INFO_LOG_SIZE];
@@ -114,8 +124,13 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Vertex attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    // Color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0); // Unbind to be sure that other VAO calls won't accidentally modify this VAO
