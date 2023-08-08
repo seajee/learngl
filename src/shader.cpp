@@ -6,72 +6,72 @@
 
 #include <glad/glad.h>
 
-learngl::Shader::Shader(const char* vertex_path, const char* fragment_path)
+learngl::Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
-    std::string vertex_source;
-    std::string fragment_source;
+    std::string vertexSource;
+    std::string fragmentSource;
 
-    std::ifstream v_file;
-    std::ifstream f_file;
+    std::ifstream vFile;
+    std::ifstream fFile;
 
-    v_file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-    f_file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+    vFile.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+    fFile.exceptions(std::ifstream::badbit | std::ifstream::failbit);
 
     // Read shader files
     try {
-        v_file.open(vertex_path);
-        f_file.open(fragment_path);
+        vFile.open(vertexPath);
+        fFile.open(fragmentPath);
 
-        std::stringstream v_stream;
-        std::stringstream f_stream;
+        std::stringstream vStream;
+        std::stringstream fStream;
 
-        v_stream << v_file.rdbuf();
-        f_stream << f_file.rdbuf();
+        vStream << vFile.rdbuf();
+        fStream << fFile.rdbuf();
 
-        v_file.close();
-        f_file.close();
+        vFile.close();
+        fFile.close();
 
-        vertex_source = v_stream.str();
-        fragment_source = f_stream.str();
+        vertexSource = vStream.str();
+        fragmentSource = fStream.str();
     } catch (std::ifstream::failure const& e) {
         std::cerr << "ERROR: Error while reading shader file" << std::endl;
     }
 
     // Compile shader files
-    const char* v_code = vertex_source.c_str();
-    const char* f_code = fragment_source.c_str();
+    const char* vCode = vertexSource.c_str();
+    const char* fCode = fragmentSource.c_str();
 
     uint32_t vertex, fragment;
     int32_t success;
-    char info_log[512];
+    char infoLog[512];
 
     vertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex, 1, &v_code, NULL);
+    glShaderSource(vertex, 1, &vCode, NULL);
     glCompileShader(vertex);
     glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(vertex, 512, NULL, info_log);
-        std::cerr << "ERROR: Failed to compile vertex shader" << std::endl << info_log << std::endl;
+        glGetShaderInfoLog(vertex, 512, NULL, infoLog);
+        std::cerr << "ERROR: Failed to compile vertex shader" << std::endl << infoLog << std::endl;
     }
 
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment, 1, &f_code, NULL);
+    glShaderSource(fragment, 1, &fCode, NULL);
     glCompileShader(fragment);
     glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(fragment, 512, NULL, info_log);
-        std::cerr << "ERROR: Failed to compile fragment shader" << std::endl << info_log << std::endl;
+        glGetShaderInfoLog(fragment, 512, NULL, infoLog);
+        std::cerr << "ERROR: Failed to compile fragment shader" << std::endl << infoLog << std::endl;
     }
 
     // Create shader program and link shaders
-    m_id = glCreateProgram();
-    glAttachShader(m_id, vertex);
-    glAttachShader(m_id, fragment);
-    glLinkProgram(m_id);
-    glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+    m_ShaderProgramId = glCreateProgram();
+    glAttachShader(m_ShaderProgramId, vertex);
+    glAttachShader(m_ShaderProgramId, fragment);
+    glLinkProgram(m_ShaderProgramId);
+    glGetProgramiv(m_ShaderProgramId, GL_LINK_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(m_id, 512, NULL, info_log);
-        std::cerr << "ERROR: Failed to link shaders" << std::endl << info_log << std::endl;
+        glGetProgramInfoLog(m_ShaderProgramId, 512, NULL, infoLog);
+        std::cerr << "ERROR: Failed to link shaders" << std::endl << infoLog << std::endl;
     }
 
     // Finally, delete the shader objects as they're no longer necessary
@@ -81,25 +81,25 @@ learngl::Shader::Shader(const char* vertex_path, const char* fragment_path)
 
 learngl::Shader::~Shader()
 {
-    glDeleteShader(m_id);
+    glDeleteShader(m_ShaderProgramId);
 }
 
-void learngl::Shader::use()
+void learngl::Shader::Use()
 {
-    glUseProgram(m_id);
+    glUseProgram(m_ShaderProgramId);
 }
 
-void learngl::Shader::set_bool(const std::string& name, bool value)
+void learngl::Shader::SetBool(const std::string& name, bool value)
 {
-    glUniform1i(glGetUniformLocation(m_id, name.c_str()), (int32_t)value);
+    glUniform1i(glGetUniformLocation(m_ShaderProgramId, name.c_str()), (int32_t)value);
 }
 
-void learngl::Shader::set_int(const std::string& name, int32_t value)
+void learngl::Shader::SetInt(const std::string& name, int32_t value)
 {
-    glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
+    glUniform1i(glGetUniformLocation(m_ShaderProgramId, name.c_str()), value);
 }
 
-void learngl::Shader::set_float(const std::string& name, float value)
+void learngl::Shader::SetFloat(const std::string& name, float value)
 {
-    glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
+    glUniform1f(glGetUniformLocation(m_ShaderProgramId, name.c_str()), value);
 }

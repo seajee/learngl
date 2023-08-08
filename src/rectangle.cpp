@@ -10,8 +10,8 @@
 
 #define INFO_LOG_SIZE 512
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void process_input(GLFWwindow* window);
+void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
+void ProcessInput(GLFWwindow* window);
 
 float vertices[] = {
      0.5f,  0.5f, 0.0f,
@@ -20,15 +20,15 @@ float vertices[] = {
     -0.5f,  0.5f, 0.0f
 };
 
-const char* vertex_shader_path = "./shaders/rectangle/vertex.vert";
-const char* fragment_shader_path = "./shaders/rectangle/fragment.frag";
+const char* vertexShaderPath = "./shaders/rectangle/vertex.vert";
+const char* fragmentShaderPath = "./shaders/rectangle/fragment.frag";
 
 uint32_t indices[] = {
     0, 1, 3,
     1, 2, 3
 };
 
-char info_log[INFO_LOG_SIZE];
+char infoLog[INFO_LOG_SIZE];
 
 int main()
 {
@@ -49,7 +49,7 @@ int main()
     glfwMakeContextCurrent(window);
 
     // Set the resize window callback function
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
 
     // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -57,7 +57,7 @@ int main()
         return -1;
     }
 
-    learngl::Shader shader(vertex_shader_path, fragment_shader_path);
+    learngl::Shader shader(vertexShaderPath, fragmentShaderPath);
 
     // Generate the VBO, VAO and EBO
     uint32_t vbo, vao, ebo;
@@ -86,14 +86,14 @@ int main()
     // Event loop
     while (!glfwWindowShouldClose(window)) {
         // Input
-        process_input(window);
+        ProcessInput(window);
 
         // Rendering
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Draw rectangle
-        shader.use();
+        shader.Use();
         glBindVertexArray(vao); // Seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
@@ -112,13 +112,13 @@ int main()
     return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     (void) window;
     glViewport(0, 0, width, height);
 }
 
-void process_input(GLFWwindow* window)
+void ProcessInput(GLFWwindow* window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);

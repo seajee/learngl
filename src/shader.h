@@ -8,18 +8,18 @@ namespace learngl
     class Shader
     {
     public:
-        Shader(const char* vertex_path, const char* fragment_path);
+        Shader(const char* vertexPath, const char* fragmentPath);
         ~Shader();
 
         // Activate the shader
-        void use();
+        void Use();
 
         // Utility uniform functions
-        void set_bool(const std::string& name, bool value);
-        void set_int(const std::string& name, int32_t value);
-        void set_float(const std::string& name, float value);
+        void SetBool(const std::string& name, bool value);
+        void SetInt(const std::string& name, int32_t value);
+        void SetFloat(const std::string& name, float value);
 
     private:
-        uint32_t m_id;
+        uint32_t m_ShaderProgramId;
     };
 }
