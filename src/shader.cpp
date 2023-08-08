@@ -33,7 +33,7 @@ learngl::Shader::Shader(const char* vertex_path, const char* fragment_path)
 
         vertex_source = v_stream.str();
         fragment_source = f_stream.str();
-    } catch (std::ifstream::failure e) {
+    } catch (std::ifstream::failure const& e) {
         std::cerr << "ERROR: Error while reading shader file" << std::endl;
     }
 
