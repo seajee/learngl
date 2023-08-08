@@ -10,8 +10,8 @@
 
 #define INFO_LOG_SIZE 512
 
-void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
-void ProcessInput(GLFWwindow* window);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void process_input(GLFWwindow* window);
 
 float vertices[] = {
     // positions          // colors
@@ -44,7 +44,7 @@ int main()
     glfwMakeContextCurrent(window);
 
     // Set the resize window callback function
-    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -79,7 +79,7 @@ int main()
     // Event loop
     while (!glfwWindowShouldClose(window)) {
         // Input
-        ProcessInput(window);
+        process_input(window);
 
         // Rendering
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -105,13 +105,13 @@ int main()
     return 0;
 }
 
-void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     (void) window;
     glViewport(0, 0, width, height);
 }
 
-void ProcessInput(GLFWwindow* window)
+void process_input(GLFWwindow* window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
